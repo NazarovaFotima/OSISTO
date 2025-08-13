@@ -20,6 +20,7 @@ from drf_yasg import openapi
 from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+from users.views import SMSLoginViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -56,13 +57,15 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/sms-auth/', include('users.urls')),
+    path('api/v1/users/', include('users.urls')),
 
-    path('api/v1/user-auth/', include('djoser.urls')),
-    path('api/v1/user_auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/v1/user_auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/v1/user_auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
+    path('api/v1/login/user-auth/', include('djoser.urls')),
+    path('api/v1/sign_up/user_auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/sign_up/user_auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/sign_up/user_auth/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/v1/sign_up/user_auth/send-sms/', SMSLoginViewSet.as_view({'post': 'send_sms'}), name='send_sms'),
+    path('api/v1/sign_up/user_auth/verify-sms/', SMSLoginViewSet.as_view({'post': 'verify_sms'}), name='verify_sms'),
 
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
