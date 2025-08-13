@@ -1,0 +1,1 @@
+from .test_users_auth import SMSLoginViewSetTestCase
